@@ -6,9 +6,6 @@ var1 = `date`
 set -e
 
 echo '开始执行命令'
-# 生成静态文件
-echo '执行命令：vuepress build docs'
-npm run docs:build
 
 #发布到github上
 echo '执行命令：git add -A'
