@@ -16,7 +16,9 @@ module.exports = {
           {
             title:'python',
             children:[
-              '/python/pycharm出现的问题及解决方法.md'
+              '/python/pycharm出现的问题及解决方法.md',
+              '/python/python函数.md',
+              '/python/python语法规则'
             ]
           },
           {
@@ -30,7 +32,8 @@ module.exports = {
           {
             title:'深度学习',
             children:[
-              '深度学习/卷积神经网络.md'
+              '深度学习/卷积神经网络.md',
+              '深度学习/神经网络和深度学习.md'
             ]
           },
           {
