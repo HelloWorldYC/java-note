@@ -5,13 +5,18 @@
   "main": "index.js",
   "scripts": {
     "docs": "vuepress dev docs",
-    "docs:build":"vuepress build docs",
-    "deploy":"bash deploy.sh",
+    "docs:build": "vuepress build docs",
+    "deploy": "bash deploy.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "vuepress": "^1.8.2"
+    "@maginapp/vuepress-plugin-katex": "^1.0.11",
+    "vuepress": "^1.8.2",
+    "vuepress-plugin-mathjax": "^1.2.8"
+  },
+  "dependencies": {
+    "mathjax": "^3.2.0"
   }
 }

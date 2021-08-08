@@ -1,6 +1,11 @@
 module.exports = {
     title: 'Hello World',
     description: 'Just playing around',
+    plugins: {
+            '@maginapp/vuepress-plugin-katex': {
+              delimiters: 'dollars'
+            }
+          },
     themeConfig: {
         navbar: true,          // 禁用导航栏
         sidebarDepth: 2,            // 侧边栏显示层数
