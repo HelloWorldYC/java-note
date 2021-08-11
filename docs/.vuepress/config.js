@@ -23,7 +23,8 @@ module.exports = {
             children:[
               '/python/pycharm出现的问题及解决方法.md',
               '/python/python函数.md',
-              '/python/python语法规则'
+              '/python/python语法规则',
+              '/python/面向对象.md'
             ]
           },
           {
