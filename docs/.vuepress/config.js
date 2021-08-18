@@ -1,5 +1,5 @@
 module.exports = {
-    title: 'Hello World',
+    title: 'The Note of HelloWorldYC',
     description: 'Just playing around',
     plugins: {
             '@maginapp/vuepress-plugin-katex': {
@@ -45,7 +45,9 @@ module.exports = {
           {
             title:'数字图像处理',
             children:[
-              '数字图像处理/基础概述.md'
+              '数字图像处理/基础概述.md',
+              '数字图像处理/像素空间关系.md',
+              '数字图像处理/图像的缩放.md'
             ]
           }
         ]

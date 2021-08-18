@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-var1 = `date`
+var1=$(date "+%Y-%m-%d %H:%M:%S")
 
 # 确保脚本抛出遇到的错误
 set -e
