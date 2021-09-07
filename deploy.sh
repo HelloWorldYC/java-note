@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-var1=$(date "+%Y-%m-%d %H:%M:%S")
+var1=`date '+%Y-%m-%d %H:%M:%S'`
 
 # 确保脚本抛出遇到的错误
 set -e
@@ -11,7 +11,7 @@ echo '开始执行命令'
 echo '执行命令：git add -A'
 git add -A
 echo "git commit -m "
-git commit -m 'update notes on $var1'
+git commit -m "update notes on $var1"
 echo '执行命令：git push -f git@github.com:HelloWorldYC/HelloWorldYC.github.io.git master'
 git push -f git@github.com:HelloWorldYC/HelloWorldYC.github.io.git master
 
@@ -29,7 +29,7 @@ git add -A
 
 # 把修改的文件提交
 echo "执行命令：git commit -m "
-git commit -m 'deploy notes on $var1'
+git commit -m "deploy notes on $var1"
 echo "执行命令：git push -f https://github.com/HelloWorldYC/HelloWorldYC.github.io.git master:gh-pages"
 git push -f https://github.com/HelloWorldYC/HelloWorldYC.github.io.git master:gh-pages
 
