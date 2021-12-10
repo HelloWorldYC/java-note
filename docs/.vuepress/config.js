@@ -47,7 +47,7 @@ module.exports = {
           {
             title:'机器学习',
             children:[
-              '机器学习/监督学习和无监督学习.md'
+              '机器学习/机器学习绪论.md'
             ]
           },
           {
