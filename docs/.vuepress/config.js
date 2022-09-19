@@ -28,6 +28,12 @@ module.exports = {
             ]
           },
           {
+            title:'java',
+            children:[
+              './java/java基础语法补充.md'
+            ]
+          },
+          {
             title:'无人机项目',
             children:[
               '/无人机项目/PX4开发环境搭建.md',
