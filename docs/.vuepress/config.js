@@ -30,7 +30,18 @@ module.exports = {
           {
             title:'java',
             children:[
-              './java/java基础语法补充.md'
+              {
+                title:'java基础',
+                children:[
+                  './java/java基础/java基础语法补充.md'
+                ]
+              },
+              {
+                title:'JavaWeb',
+                children:[
+                  './java/JavaWeb/MySQL.md'
+                ]
+              }
             ]
           },
           {
