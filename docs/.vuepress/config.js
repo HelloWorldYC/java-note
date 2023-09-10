@@ -1,4 +1,5 @@
 module.exports = {
+    base: `/Note/`,
     title: 'The Note of HelloWorldYC',
     description: 'Just playing around',
     plugins: {
