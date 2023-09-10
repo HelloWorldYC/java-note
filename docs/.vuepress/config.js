@@ -28,23 +28,6 @@ module.exports = {
             ]
           },
           {
-            title:'java',
-            children:[
-              {
-                title:'java基础',
-                children:[
-                  './java/java基础/java基础语法补充.md'
-                ]
-              },
-              {
-                title:'JavaWeb',
-                children:[
-                  './java/JavaWeb/MySQL.md'
-                ]
-              }
-            ]
-          },
-          {
             title:'无人机项目',
             children:[
               '/无人机项目/PX4开发环境搭建.md',
@@ -62,12 +45,6 @@ module.exports = {
             ]
           },
           {
-            title:'机器学习',
-            children:[
-              '机器学习/机器学习绪论.md'
-            ]
-          },
-          {
             title:'深度学习',
             children:[
               '深度学习/卷积神经网络.md',
@@ -82,18 +59,10 @@ module.exports = {
             ]
           },
           {
-            title:'图像分割',
-            children:[
-              '图像分割/基于深度学习的图像语义分割综述.md',
-              '图像分割/图像分割综述.md'
-            ]
-          },
-          {
             title:'信源数估计',
             children:[
               '信源数估计/信源数估计综述.md',
               '信源数估计/一点想法.md',
-              '信源数估计/疑问.md',
               '信源数估计/各种信源算法.md',
               '信源数估计/知识细节.md',
               {
@@ -104,6 +73,78 @@ module.exports = {
                   '信源数估计/空间谱估计基础/空间谱估计基础知识.md',
                   '信源数估计/空间谱估计基础/信号源数估计.md',
                   '信源数估计/空间谱估计基础/前后向空间平滑法.md'
+                ]
+              }
+            ]
+          },
+          {
+            title:'Java',
+            children:[
+              {
+                title:'Java基础',
+                children:[
+                  'Java/Java基础/Java基础语法补充.md',
+                  'Java/Java基础/Java并发编程.md',
+                  'Java/Java基础/阻塞队列.md'
+                ]
+              },
+              {
+                title:'Java框架',
+                children:[
+                  './Java/Java框架/Elasticsearch.md',
+                  './Java/Java框架/Kafka.md',
+                  './Java/Java框架/SpringSecurity.md'
+                ]
+              },
+              {
+                title:'校园信息交流平台项目',
+                children:[
+                  './Java/校园信息交流平台项目/项目总体.md',
+                  './Java/校园信息交流平台项目/项目细节.md',
+                  './Java/校园信息交流平台项目/项目问题及解决.md',
+                  './Java/校园信息交流平台项目/项目常见面试题.md'
+                ]
+              },
+              {
+                title:'简易RPC框架项目',
+                children:[
+                  './Java/简易RPC框架项目/RPC原理.md',
+                  './Java/简易RPC框架项目/Socket网络通信.md',
+                  './Java/简易RPC框架项目/Netty从入门到网络通信实战.md',
+                  './Java/简易RPC框架项目/项目网络传输模块细节.md',
+                  './Java/简易RPC框架项目/项目注册中心模块细节.md',
+                  './Java/简易RPC框架项目/Zookeeper.md',
+                  './Java/简易RPC框架项目/服务注册与消费细节.md',
+                  './Java/简易RPC框架项目/负载均衡细节.md',
+                  './Java/简易RPC框架项目/静态代理与动态代理.md',
+                  './Java/简易RPC框架项目/Docker.md',
+                  './Java/简易RPC框架项目/项目过程中遇到的bug.md',
+                  './Java/简易RPC框架项目/项目问题.md'
+                ]
+              },
+              {
+                title: '内功',
+                children:[
+                  {
+                    title:'MySQL',
+                    children:[
+                      './Java/内功/MySQL/基础架构.md',
+                      './Java/内功/MySQL/易忘的重点.md'
+                    ]
+                  },
+                  {
+                    title:'Redis',
+                    children:[
+                      './Java/内功/Redis/Redis总体架构.md',
+                      './Java/内功/Redis/Redis一点点细节.md'
+                    ]
+                  },
+                  {
+                    title:'操作系统',
+                    children:[
+                      './Java/内功/操作系统/导论.md'
+                    ]
+                  }
                 ]
               }
             ]

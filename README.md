@@ -1,5 +1,3 @@
----
-title: 'The Note of HelloWorldYC' 
----
 
 ## The Note of HelloWorldYC
+个人笔记
