@@ -2,6 +2,7 @@ module.exports = {
     base: `/Note/`,
     title: 'The Note of HelloWorldYC',
     description: 'Just playing around',
+    head: [['link', {rel: 'icon', href: '/images/myfavicon.png'}]],
     plugins: {
             '@maginapp/vuepress-plugin-katex': {
               delimiters: 'dollars'
