@@ -148,7 +148,9 @@ module.exports = {
                     ]
                   }
                 ]
-              }
+              },
+              './Java/八股自测速记之JVM.md',
+              './Java/八股自测速记之Spring.md'
             ]
           }
         ]
