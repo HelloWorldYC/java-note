@@ -21,6 +21,7 @@ cd ./docs/.vuepress/dist
 
 
 # 保存所有的修改
+git init
 echo "执行命令：git add -A"
 git add -A
 
