@@ -98,7 +98,7 @@ Bean 是否线程安全，取决于作用域和状态。
 
 #### Spring AOP 是什么？
 Aspect-Oriented Programmer，面向切面编程，用于进行方法功能增强或封装通用的代码逻辑。   
-Spring AOP 是基于动态代理的，若要代理的对象实现了接口则使用 JDK 动态代理，若未实现接口则使用 CGLib 动态代理。
+Spring AOP 底层实现是基于动态代理的，若要代理的对象实现了接口则使用 JDK 动态代理，若未实现接口则使用 CGLib 动态代理。
 
 #### AOP 切面编程涉及到的专业术语有哪些？
 - 目标（Target）：要代理的对象。
@@ -166,7 +166,6 @@ Spring MVC 是一款很优秀的 MVC 框架，可以简化 Web 层的开发，�
 - 模板方法模式：`java.io.InputStream` 和 `java.io.OutputStream` 类中的读取和写入方法使用了模板方法模式，其中核心算法由超类定义，而具体操作由子类实现。
 - 命令模式：`java.util.concurrent` 包中的 `Executor` 接口使用了命令模式，将任务封装为命令以异步执行。
 
-
 #### Spring 中用到了哪些设计模式？
 - 依赖注入（Dependency Inject）：它是实现控制反转的一种设计模式，就是将实例变量传入到一个对象中去。
 - 工厂设计模式：Spring 使用工厂模式可以通过 `BeanFactory` 或 `ApplicationContext` 创建 bean 对象。
@@ -174,9 +173,8 @@ Spring MVC 是一款很优秀的 MVC 框架，可以简化 Web 层的开发，�
 - 代理模式：Spring AOP 就是基于动态代理的，如果要代理的对象实现了某个接口则使用 JDK 动态代理，如果没有实现接口则使用 CGlib 动态代理。
 - 模板方法模式：一种行为设计模式，它定义一个操作中的算法的骨架，而将一些步骤延迟到子类中实现。模板方法使得子类可以不改变一个算法的结构即可重定义该算法的某些特定步骤的实现方式。Spring 中 `JdbcTemplate、HibernateTemplate` 等以 Template 结尾的对数据库操作的类，它们就使用到了模板模式。
 - 观察者模式：一种对象行为型模式，表示一种对象与对象之间具有依赖关系，当一个对象发生改变的时候，依赖这个对象的所有对象也会做出反应。Spring 事件驱动模型就是观察者模式很经典的一个应用。
-- 适配器模式：Adapter Pattern 将一个接口转换成客户希望的另一个接口，适配器模式使接口不兼容的那些类可以一起工作。
-
-
+- 适配器模式：Adapter Pattern 将一个接口转换成客户希望的另一个接口，适配器模式使接口不兼容的那些类可以一起工作。Spring AOP 的 Advice 用到了适配器模式。Spring MVC 中 DispatcherServlet 解析到对应的 Handler 后，由 HandlerAdapter 适配器处理。
+- 装饰者模式：装饰者模式可以动态地给对象添加一些额外的属性或行为。Spring 中用到的装饰器模式在类名上含有 `Wrapper` 或者 `Decorator`。
 
 #### 使用单例模式的好处？
 - 对于频繁使用的对象，可以省略创建对象所花费的时间，特别是对重量级对象而言。
@@ -188,3 +186,86 @@ Spring MVC 是一款很优秀的 MVC 框架，可以简化 Web 层的开发，�
   - `ClassPathXmlApplication`：它会在类路径下查找指定的 XML 配置文件，并根据配置文件中定义的 Bean 来初始化应用程序上下文。
   - `FileSystemXmlApplication`：从本地文件系统中的 XML 文件载入上下文定义信息。
   - `XmlWebApplicationContext`：从 Web 系统中的 XML 文件载入上下文定义信息。
+
+#### 为什么要在 Spring MVC 中使用适配器模式？
+Spring MVC 中的 Controller 种类众多，不同类型的 Controller 通过不同的方法来对请求进行处理。如果不利用适配器模式而让 DispatcherServlet 直接获取对应类型的 Controller 的话，每加一个Controller 就需要加一行判断，这使得程序难以维护，且违反了设计模式中的开闭原则。
+
+
+## Spring 事务
+**只有保证了事务的原子性、隔离性、持久性，一致性才能得到保障。A、I、D 是手段，D 是目的。**
+
+#### Spring 中由哪两种支持事务管理的方式？
+- 编程式事务管理：通过 `TransactionTemplate` 或者 `TransactionManager` 手动管理事务，实际应用中很少使用。
+- 声明式事务管理：推荐使用（代码侵入性最小），实际是通过 AOP 实现（基于 `@Transactional` 的全注解方式使用最多）
+
+#### Spring 中事务相关的三个重要接口？
+- `PlatformTransactionManager`：（平台）事务管理器，事务上层的管理者，Spring 事务策略的核心。
+- `TransactionDefinition`：对于事务的一些定义信息，如事务隔离级别、传播行为、超时、只读、回滚规则。
+- `TransactionStatus`：事务运行状态，提供了一些接口获取事务相应的状态，比如是否新事务、是否可以回滚等。
+
+#### 为什么要定义或者说抽象 `PlatformTransactionManager` 这个接口？
+Spring 并不直接管理事务，而是通过 `PlatformTransactionManager` 接口抽象出了事务管理行为，然后由不同的平台去实现它，这样可以保证提供给外部的行为不变，方便扩展，其实就是一种 SPI 机制。
+
+#### 什么是事务属性？
+事务属性即事务的一些基本配置，描述了事务策略如何应用到方法上，包含了 5 个方面：
+- 隔离级别
+- 传播行为
+- 回滚规则
+- 是否只读
+- 事务超时
+
+#### 什么是事务传播行为？
+事务传播行为是为了解决业务层方法之间互相调用的事务问题。当事务方法被另一个事务方法调用时，必须指定事务应该如何传播。
+- `TransactionDefinition.PROPAGATION_REQUIRED`：默认的事务传播行为，也是使用最多的。如果当前存在事务，则加入该事务，只要一个方法回滚，整个事务均回滚；如果当前没有事务，则创建一个新的事务。
+- `TransactionDefinition.PROPAGATION_SUPPORTS`：如果当前存在事务，则加入该事务；如果当前没有事务，则以非事务的方式继续运行。
+- `TransactionDefinition.PROPAGATION_MANDATORY`：如果当前存在事务，则加入该事务；如果当前没有事务，则抛出异常。
+- `TransactionDefinition.PROPAGATION_REQUIRES_NEW`：不管外部方法是否开启事务，内部方法会新开启自己的事务，且开启的事务相互独立，互不干扰。但是如果内部方法抛出未被捕获异常，则外部事务管理机制可以检测到，有可能回滚。
+- `TransactionDefinition.PROPAGATION_NOT_SUPPORTED`：以非事务方式运行，如果当前存在事务，则把当前事务挂起。
+- `TransactionDefinition.PROPAGATION_NEVER`：以非事务方式运行，如果当前存在事务，则抛出异常。
+- `TransactionDefinition.PROPAGATION_NESTED`：如果外部方法开启事务的情况下，在内部开启一个新的事务，作为嵌套事务存在。如果外部方法无事务，则单独开启一个事务，跟 `PROPAGATION_REQUIRED` 类似。
+
+#### 事务有哪些隔离级别？
+- `TransactionDefinition.ISOLATION_DEFAULT`：使用后端数据库默认的隔离级别。
+- `TransactionDefinition.ISOLATION_READ_UNCOMMITTED`：读未提交，最低的隔离级别，可能会导致脏读、幻读、不可重复读。
+- `TransactionDefinition.ISOLATION_READ_COMMITTED`：读提交，可以阻止脏读，但仍有可能发生幻读和不可重复读。
+- `TransactionDefinition.ISOLATION_REPEATABLE_READ`：可阻止脏读和不可重复读，但仍有可能发生幻读。
+- `TransactionDefinition.ISOLATION_SERIALIZABLE`：事务一个个执行，则事务之间不可能产生干扰。该级别可以防止脏读、幻读、不可重复读，但严重影响程序性能。
+
+#### 事务的只读属性有什么作用？
+- 如果一次执行单条查询语句，则没有必要启用事务支持，数据库默认支持 SQL 执行期间的读一致性；
+- 如果一次执行多条查询语句，例如统计查询，报表查询，在这种场景下要保证整体的读一致性，应该开启事务。否则，在前后查询期间若被其他用户改变，则该次整体的统计查询将会出现数据不一致的状态。
+
+#### 什么是事务回滚规则？
+事务回滚规则定义了哪些异常会导致事务回滚而哪些不会。
+- 默认情况下，事务只有遇到运行时异常（`RuntimeException` 的子类）时才会回滚，`Error` 也会导致事务回滚，但是，在遇到受检查异常（Checked）时不会回滚。
+- 如果想要回滚特定的异常类型，可以通过配置：`@Transactional(rollback = MyException.class)`。
+
+#### `@Transactional` 注解原理？
+`@Transactional` 的工作机制是基于 AOP 实现的，AOP 又是使用动态代理实现的。如果目标对象实现了接口，默认情况下使用 JDK 动态代理；如果没有实现接口，则会使用 CGLib 动态代理。  
+
+如果一个类或者一个类中的 public 方法上被标注了 @Transactional 注解的话，Spring 容器会在启动的时候为其创建一个代理类，在调用被 `@Transactional` 注解的 public 方法时，实际调用的是 `TransactionInterceptor` 类中的 `invoke()` 方法。这个方法的作用就是在调用目标方法之前开启事务，方法执行过程中如果遇到异常的时候回滚事务，方法调用完成之后提交事务。
+
+#### Spring AOP 自调用问题？（@Transactional 的自调用问题？）
+当一个方法被标记了 `@Transactional` 注解的时候，Spring 事务管理器只会在被其他类方法调用的时候生效，而在同类的其他内部方法调用时无法生效。这是由 Spring AOP 工作原理决定，Spring AOP 在其他类的方法调用其代理对象时进行拦截，而同一个类的方法调用时则无法拦截到这个内部调用，因此事务失效。解决方法就是避免在同一类中进行自调用或者使用 AspectJ 取代 Spring AOP 代理。
+
+
+## Spring Data JPA
+
+#### 如何使用 JPA 在数据库中非持久化一个字段？
+- static 修饰
+- final 修饰
+- transient 修饰
+- @Transient 注解
+
+#### JPA 审计功能是做什么的？有什么作用？
+审计功能主要是帮助我们记录数据库操作的具体行为比如某条记录是谁创建的、什么时候创建的、最后修改人是谁、最后修改时间是什么时候。
+- @CreatedDate
+- @CreatedBy
+- @LastModifiedDate
+- @LastModifiedBy
+
+#### 实体之间的关联关系注解有哪些？
+- @OneToOne
+- @ManyToMany
+- @OneToMany
+- @ManyToOne
