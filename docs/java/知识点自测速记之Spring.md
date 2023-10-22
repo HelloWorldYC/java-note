@@ -269,3 +269,25 @@ Spring 并不直接管理事务，而是通过 `PlatformTransactionManager` 接�
 - @ManyToMany
 - @OneToMany
 - @ManyToOne
+
+
+
+
+## Spring Security
+
+#### 有哪些控制请求的访问权限的方法？
+
+#### 它提供了哪些对密码进行加密的方法？（如何进行加密？）
+
+
+
+
+## Spring Boot 自动装配原理
+
+#### 什么是 Spring Boot 自动装配？
+
+#### Spring Boot 如何实现自动装配的？如何实现按需加载？
+
+#### 如何实现一个 starter？
+
+#### @SpringBootApplication 的作用？

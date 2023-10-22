@@ -150,13 +150,16 @@ module.exports = {
                 ]
               },
               './Java/知识点自测速记之Java基础.md',
+              './Java/知识点自测速记之Java集合.md',
               './Java/知识点自测速记之Java并发编程.md',
               './Java/知识点自测速记之JVM.md',
               './Java/知识点自测速记之计算机网络.md',
               './Java/知识点自测速记之操作系统.md',
+              './Java/知识点自测速记之数据库基础.md',
               './Java/知识点自测速记之MySQL.md',
               './Java/知识点自测速记之Redis.md',
-              './Java/知识点自测速记之Spring.md'
+              './Java/知识点自测速记之Spring.md',
+              './Java/知识点自测速记之Mybatis.md'
             ]
           }
         ]
