@@ -7,6 +7,26 @@ title: '知识点自测速记之Spring'
 
 
 
+
+
+## 重点问题
+
+#### 谈一谈你对 IoC 的理解？
+可以从三个方面回答这个问题：**容器概念**、**控制反转**、**依赖注入**。
+- IoC 容器：实际上就是个 map，里面存的是各种对象，在项目启动的时候会读取配置文件中的 bean，根据全限定名使用反射创建对象放到 map 中、扫描到打上 `@Component` 等注解的类还是通过反射创建对象放到 map 中。等需要用到里面的对象时，再通过 DI 注入（通过注解或者 xml 注入）。
+- 控制反转：在没有引入 IoC 容器前，对象依赖于另一个对象需要主动去创建依赖的对象，而引入 IoC 容器后，对象和依赖对象失去了直接联系，当对象使用到依赖对象时，IoC 容器会自动注入。
+- 依赖注入：“获得依赖对象的过程被反转了”。控制被反转之后，获得依赖对象的过程由自身管理变为了 IoC 容器主动注入。依赖注入是实现 IoC 的方法，就是由 IoC 容器在运行期间，动态地将某种依赖关系注入到对象之中。
+
+#### 谈谈你对 IoC 和 DI 的理解？
+首先，Spring IoC 全称叫 Inversion of Control，即控制反转。在传统的 Java 程序中，我们只能通过 new 关键字来创建个对象，这种方式会导致程序里面对象的依赖关系比较复杂，而且耦合度比较高。而 IoC 的主要作用就是实现了对象的管理，也就是我们把设计好的对象交给 IoC 容器来控制，然后在需要用到目标对象的时候，直接从容器中获取。有了 IoC 容器来管理 bean 以后，相当于把对象的创建和查找依赖，对象的控制，交给了容器。这种设计理念使得对象和对象之间是一种松耦合状态，极大的提升了程序的灵活性，以及功能的复用性。    
+
+然后，DI 表示依赖注入，也就是说对于 IoC 容器中管理的 bean，如果 bean 之间存在依赖关系，那么 IoC 容器需要自动去实现依赖对象的实例注入。通常我们有三种方式描述 bean 和 bean 之间的依赖关系：接口注入、Setter 注入、构造器注入。另外，为了更灵活地去实现 bean 的实例的依赖注入，Spring 还提供了 `@Autowired` 注解，根据 bean 的 type 去实现依赖注入（`@Resource` 是 JDK 提供的）。
+
+
+#### 谈谈你对 AOP 的理解？
+将程序中的交叉业务逻辑（如安全、日志、事务等），封装成一个切面，然后注入到目标对象（具体业务逻辑）中去。AOP 可以对某个对象或某些对象的功能进行增强，可以在目标对象方法前后做额外的事情。Spring AOP 使用了动态代理（CGlib 和 JDK 动态代理）来实现。
+
+
 ## Spring 基础
 
 #### 什么是 Spring 框架？
@@ -190,6 +210,19 @@ Spring MVC 是一款很优秀的 MVC 框架，可以简化 Web 层的开发，�
 #### 为什么要在 Spring MVC 中使用适配器模式？
 Spring MVC 中的 Controller 种类众多，不同类型的 Controller 通过不同的方法来对请求进行处理。如果不利用适配器模式而让 DispatcherServlet 直接获取对应类型的 Controller 的话，每加一个Controller 就需要加一行判断，这使得程序难以维护，且违反了设计模式中的开闭原则。
 
+#### 有哪些设计原则？
+1. **单一职责原则（Single Responsibility Principle，SRP）：** 一个类应该只有一个引起变化的原因。换句话说，一个类应该只有一个责任。
+2. **开放封闭原则（Open/Closed Principle，OCP）：** 软件实体（类、模块、函数等）应该对扩展开放，对修改关闭。通过扩展现有的代码来适应新的需求，而不是直接修改已有的代码。
+3. **里氏替换原则（Liskov Substitution Principle，LSP）：** 子类型必须能够替换掉它们的基类型，而不影响程序的正确性。即，如果一个程序中使用了基类，那么替换成子类也不应该导致程序出错。
+4. **依赖倒置原则（Dependency Inversion Principle，DIP）：** 高层模块不应该依赖于底层模块，二者都应该依赖于抽象。抽象不应该依赖于具体实现细节，具体实现细节应该依赖于抽象。
+5. **接口隔离原则（Interface Segregation Principle，ISP）：** 不应该强迫一个类实现它用不到的接口。客户端不应该被迫依赖于它们不使用的方法。
+6. **合成/聚合复用原则（Composition/Aggregation Reuse Principle，CARP）：** 首选使用合成/聚合，而不是继承来达到复用的目的。通过将现有的类组合到新的类中，而不是通过继承现有类，可以更灵活地达到复用的目的。
+7. **最小知识原则（Law of Demeter，LoD）：** 一个对象应该对其他对象有尽可能少的了解。换句话说，一个类不应该知道太多关于其他类的内部细节。
+8. **迪米特法则（Law of Demeter，LoD）：** 一个软件实体应当尽可能少地与其他实体发生相互作用。也就是说，一个对象应该对其他对象有最小的了解。
+9. **KISS原则（Keep It Simple, Stupid）：** 简单问题的解决方案往往比复杂问题的解决方案更好。因此，在设计中应该保持简单，避免过度复杂化。
+10. **DRY原则（Don't Repeat Yourself）：** 不要重复代码，避免在系统中存在相似或相同的代码片段。通过抽象和封装来避免重复。
+
+
 
 ## Spring 事务
 **只有保证了事务的原子性、隔离性、持久性，一致性才能得到保障。A、I、D 是手段，D 是目的。**
@@ -276,18 +309,52 @@ Spring 并不直接管理事务，而是通过 `PlatformTransactionManager` 接�
 ## Spring Security
 
 #### 有哪些控制请求的访问权限的方法？
+- `permitAll()`：无条件允许任何形式访问，不管你登录还是没有登录。
+- `anonymous()`：允许匿名访问，也就是没有登录才可以访问。
+- `denyAll()`：无条件决绝任何形式的访问。
+- `authenticated()`：只允许已认证的用户访问。
+- `fullyAuthenticated()`：只允许已经登录或者通过 remember-me 登录的用户访问。
+- `hasRole(String) `: 只允许指定的角色访问。
+- `hasAnyRole(String)` : 指定一个或者多个角色，满足其一的用户即可访问。
+- `hasAuthority(String)`：只允许具有指定权限的用户访问。
+- `hasAnyAuthority(String)`：指定一个或者多个权限，满足其一的用户即可访问。
+- `hasIpAddress(String)` : 只允许指定 ip 的用户访问。
 
 #### 它提供了哪些对密码进行加密的方法？（如何进行加密？）
-
+Spring Security 提供了多种加密算法的实现，开箱即用，非常方便。这些加密算法实现类的父类是 `PasswordEncoder` ，如果你想要自己实现一个加密算法的话，也需要继承 `PasswordEncoder`。
 
 
 
 ## Spring Boot 自动装配原理
 
 #### 什么是 Spring Boot 自动装配？
+提到自动装配的时候，一般会和 Spring Boot 联系在一起。但是，实际上 Spring Framework 早就实现了这个功能。Spring Boot 只是在其基础上，通过 SPI 的方式，做了进一步优化。   
+
+SpringBoot 定义了一套接口规范，这套规范规定：SpringBoot 在启动时会扫描外部引用 jar 包中的 `META-INF/spring.factories` 文件，将文件中配置的类型信息加载到 Spring 容器，并执行类中定义的各种操作。对于外部 jar 来说，只需要按照 SpringBoot 定义的标准，就能将自己的功能装置进 SpringBoot。   
+
+自动装配可以简单理解为：**通过注解或者一些简单的配置就能在 Spring Boot 的帮助下实现某块功能**。比如，在需要引入第三方依赖时，引入一个起步依赖 `starter` 即可。
 
 #### Spring Boot 如何实现自动装配的？如何实现按需加载？
+Spring Boot 的自动装配是通过条件注解实现的。Spring Boot 会在 `classpath` 中寻找符合条件的类，并根据这些类自动配置 Bean。这些条件注解有：
+- `@ConditionalOnClass`：类路径下存在指定的类时才会生效。
+- `@ConditionalOnMissingBean`：容器中不存在指定 Bean 时才会生效。
+- `@ConditionalOnProperty`：指定的属性是否有指定的值。
 
-#### 如何实现一个 starter？
+Spring Boot 自动装配的步骤如下：
+1. Spring Boot 启动时会加载 `META-INF/spring.factories` 文件，该文件中配置了所有自动装配的类。
+2. 根据条件注解和实现类，Spring Boot 筛选出符合条件的类。
+3. Spring Boot 会根据类中的配置信息来自动配置 Bean。
+4. 配置完成后，Spring Boot 会将所有的 Bean 注册到容器中，以供其他组件使用。
+
+除了使用Spring Boot提供的自动配置之外，我们还可以自定义自己的自动配置。自定义自动配置需要完成以下步骤：
+1. 创建一个配置类，并在类上添加 `@Configuration` 和 `@EnableConfigurationProperties` 注解。
+2. 在配置类中使用 `@ConditionalOnClass`、`@ConditionalOnMissingBean` 等条件注解，指定自动配置的条件。
+3. 使用 `@ConfigurationProperties` 注解创建配置属性类，并在配置类中注入该属性类。
+4. 编写需要自动配置的 Bean。
+5. 使用 `@Bean` 注解将 Bean 注册到容器中。
 
 #### @SpringBootApplication 的作用？
+`@SpringBootApplication` 可以看作是 `@Configuration`、`@EnableAutoConfiguration`、`@ComponentScan` 注解的集合。这三个注解的作用分别是：
+- `@EnableAutoConfiguration`：启动 SpringBoot 的自动配置机制。
+- `@Configuration`：允许在上下文中注册额外的 bean 或导入其他配置类。
+- `@ComponentScan`：扫描被 `@Component`、`@Service`、`@Controller` 注解的 bean，注解默认会扫描启动类所在的包下所有的类，可以自定义不扫描某些 Bean。

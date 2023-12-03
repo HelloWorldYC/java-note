@@ -58,13 +58,27 @@ title: '知识点自测速记之Java并发编程'
 不一定。对于单核CPU来说，同一时刻只能有一个线程在运行。如果线程是 CPU 密集型的，那么多个线程同时运行会导致频繁的上下文切换，增加了系统开销，降低了效率。如果线程是 IO 密集型的，那么多个线程同时运行能够利用 CPU 在等待 IO 时的空闲时间，提高了效率。
 
 #### 说说线程的生命周期和状态？
-**这个比较有疑问，按理说应该与进程的生命周期一致，可能有一些细分。**   
+这个比较有疑问，按理说应该与进程的生命周期一致，可能有一些细分。 
 - NEW：初始状态，线程被创建出来但没有被调用 `start()`。
 - RUNNABLE：运行状态(包括就绪 READY 和运行中 RUNNING)：线程被调用了 `start()` 等待运行的状态。
 - BLOCKED：阻塞状态，需要等待锁释放。
 - WAITING：等待状态，表示该线程需要等待其他线程做出一些特定动作（通知或中断）。
 - TIME_WAITING：超时等待状态，可以在指定的时间后自行返回而不是像 WAITING 那样一直等待。
 - TERMINATED：终止状态，表示该线程已经运行完毕。
+
+#### 线程从 RUNNING 变为 BLOCKED以及 TIME_WAITING 状态有哪些方式？
+从 RUNNING 变为 BLOCKED 主要有两种情况：
+1. 等待获取锁。原因是不同线程竞争锁，比如说 `Synchronized`。
+2. 在等待 IO 的时候。这个时候不是线程竞争锁，而是线程将控制权交给了底层 IO 操作系统，等待底层的 I/O 操作完成。
+
+从 RUNNING 变为 TIME_WAITING 主要有以下五种方式：
+1. `Thread.sleep(long mills)`
+2. `Object.wait(long mills)`
+3. `Thread.join(long mills)`
+4. `LockSupport.parkNanos()`
+5. `LockSupport.parkUntil()`
+
+TIMED_WAITING 和 WAITING 状态的区别，仅仅是触发条件多了超时参数。
 
 #### 什么是线程的上下文切换？
 线程在执行过程过程中会有自己的运行条件和状态（也称上下文）。当线程发生了如下三种情况会发生线程切换，将 CPU 让出来：
