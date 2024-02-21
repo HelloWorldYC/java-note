@@ -93,7 +93,16 @@ module.exports = {
               {
                 title:'Java框架',
                 children:[
-                  './Java/Java框架/Elasticsearch.md',
+                  {
+                    title:'微服务',
+                    children:[
+                      './Java/Java框架/微服务/微服务介绍.md',
+                      './Java/Java框架/微服务/Docker入门.md',
+                      './Java/Java框架/微服务/RabbitMQ入门.md',
+                      './Java/Java框架/微服务/Elasticsearch入门.md',
+
+                    ]
+                  },
                   './Java/Java框架/Kafka.md',
                   './Java/Java框架/SpringSecurity.md'
                 ]
@@ -149,17 +158,22 @@ module.exports = {
                   }
                 ]
               },
-              './Java/知识点自测速记之Java基础.md',
-              './Java/知识点自测速记之Java集合.md',
-              './Java/知识点自测速记之Java并发编程.md',
-              './Java/知识点自测速记之JVM.md',
-              './Java/知识点自测速记之计算机网络.md',
-              './Java/知识点自测速记之操作系统.md',
-              './Java/知识点自测速记之数据库基础.md',
-              './Java/知识点自测速记之MySQL.md',
-              './Java/知识点自测速记之Redis.md',
-              './Java/知识点自测速记之Spring.md',
-              './Java/知识点自测速记之Mybatis.md'
+              {
+                title:'知识点自测速记',
+                children:[
+                  './Java/知识点自测速记/知识点自测速记之Java基础.md',
+                  './Java/知识点自测速记/知识点自测速记之Java集合.md',
+                  './Java/知识点自测速记/知识点自测速记之Java并发编程.md',
+                  './Java/知识点自测速记/知识点自测速记之JVM.md',
+                  './Java/知识点自测速记/知识点自测速记之计算机网络.md',
+                  './Java/知识点自测速记/知识点自测速记之操作系统.md',
+                  './Java/知识点自测速记/知识点自测速记之数据库基础.md',
+                  './Java/知识点自测速记/知识点自测速记之MySQL.md',
+                  './Java/知识点自测速记/知识点自测速记之Redis.md',
+                  './Java/知识点自测速记/知识点自测速记之Spring.md',
+                  './Java/知识点自测速记/知识点自测速记之Mybatis.md'
+                ]
+              }
             ]
           }
         ]
