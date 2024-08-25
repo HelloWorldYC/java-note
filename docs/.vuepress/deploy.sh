@@ -18,5 +18,5 @@ echo "执行命令：git commit -m "
 git commit -m "deploy notes on $var1"
 
 # 注意，若 git push 出现错误 10054，则可能是因为开启了代理的原因，将代理关闭再进行尝试
-echo "执行命令：git push -f https://github.com/HelloWorldYC/Note.git master:gh-pages"
-git push -f https://github.com/HelloWorldYC/Note.git master:gh-pages
+echo "执行命令：git push -f https://github.com/HelloWorldYC/personal-note.git master:gh-pages"
+git push -f https://github.com/HelloWorldYC/personal-note.git master:gh-pages

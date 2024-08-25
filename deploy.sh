@@ -12,8 +12,8 @@ echo '执行命令：git add -A'
 git add -A
 echo "git commit -m "
 git commit -m "update notes on $var1"
-echo '执行命令：git push -f git@github.com:HelloWorldYC/Note.git master'
-git push -f git@github.com:HelloWorldYC/Note.git master
+echo '执行命令：git push -f git@github.com:HelloWorldYC/personal-note.git master'
+git push -f git@github.com:HelloWorldYC/personal-note.git master
 
 # 进入生成的文件夹
 echo "执行命令：cd ./docs/.vuepress/dist\n"
@@ -27,8 +27,8 @@ git add -A
 # 把修改的文件提交
 echo "执行命令：git commit -m "
 git commit -m "deploy notes on $var1"
-echo "执行命令：git push -f https://github.com/HelloWorldYC/Note.git master:gh-pages"
-git push -f https://github.com/HelloWorldYC/Note.git master:gh-pages
+echo "执行命令：git push -f https://github.com/HelloWorldYC/personal-note.git master:gh-pages"
+git push -f https://github.com/HelloWorldYC/personal-note.git master:gh-pages
 
 echo "回到刚才工作目录"
 cd -
