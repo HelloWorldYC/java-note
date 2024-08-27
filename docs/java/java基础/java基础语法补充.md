@@ -8,7 +8,7 @@ title: 'Java基础语法补充'
  <div align="center"><img src="./pictures/java基础语法补充/成员变量和局部变量的区别.png" width="100%"/></div>  
 
 
-## 键盘录入
+## 键盘录入体系
 
 ```java
 //第一套体系：遇到空格、制表符、回车就停止接收，这些符号后面的数据就不会接收了
