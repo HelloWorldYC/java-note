@@ -565,12 +565,10 @@ ThreadLocal 导致内存泄漏需要满足两个条件：
 #### 如何创建线程池？
 - 通过 `ThreadPoolExecutor` 构造函数来创建（推荐）
 - 通过 `Executor` 框架的工具类 `Executors` 来创建。
-
-可以创建多种类型的线程池：
-- `FixedThreadPool`：固定线程数量的线程池。
-- `SingleThreadExecutor`：只有一个线程的线程池。
-- `CachedThreadPool`：可根据实际情况调整线程数量的线程池。
-- `ScheduledThreadPool`：用来在给定的延迟后运行任务或者定期执行任务的线程池。
+  - `FixedThreadPool`：固定线程数量的线程池。
+  - `SingleThreadExecutor`：只有一个线程的线程池。
+  - `CachedThreadPool`：可根据实际情况调整线程数量的线程池。
+  - `ScheduledThreadPool`：用来在给定的延迟后运行任务或者定期执行任务的线程池。
 
 #### 为什么不推荐使用内置线程池？
 - `FixedThreadPool` 和 `SingleThreadExecutor`：使用的是无界的 `LinkedBlockingQueue`，任务队列的最大长度为 `Integer.MAX_VALUE`，可能堆积大量的请求，从而导致 OOM。
@@ -578,7 +576,7 @@ ThreadLocal 导致内存泄漏需要满足两个条件：
 - `ScheduledThreadPool` 和 `SingleThreadSCheduledExecutor`：使用的是无界的延迟阻塞队列 `DelayedWorkQueue`，任务队列最大长度为 `Integer.MAX_VALUE`，可能会堆积大量的请求，从而导致 OOM。
 
 #### 线程池常用参数有哪些？
-`ThreadPoolExecutor` 3 个最重要的参数：
+`ThreadPoolExecutor` 3 个最重要的参数：   
 - `corePoolSize`：核心线程数，任务队列未达到队列容量时，最大可以同时运行的线程数量。
 - `maximumPoolSize`：最大线程数量。任务队列存放的任务达到队列容量的时候，当前可以同时运行的线程数量变为最大线程数。
 - `WorkQueue`：新任务来的时候会先判断当前运行的线程数量是否达到核心线程数，如果达到，新任务会存放在队列中等待执行。
@@ -588,6 +586,10 @@ ThreadLocal 导致内存泄漏需要满足两个条件：
 - `unit`：`keepAliveTime` 的时间单位。
 - `threadFactory`：`executor` 创建新线程的时候通过这个工厂来创建。
 - `handler`：饱和策略。当前同时运行的线程数达到最大线程数并且队列也满的时候，执行的策略。
+
+#### 线程池的核心线程会被回收吗？  
+`ThreadPoolExecutor` 默认是不会回收的。但是可以通过将 `allowCoreThreadTimeOut(boolean value)` 方法的参数设置为 `true`，这样在核心线程空闲之后经过 `keepAliveTime` 时间就会回收。  
+
 
 #### 线程池的饱和策略有哪些？
 - `ThreadPoolExecutor.AbortPolicy`：抛出 `RejectedExecutionException` 来拒绝新任务的处理。
