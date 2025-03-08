@@ -68,3 +68,75 @@ Netty的零拷贝包括以下四个方面：
   > CompositeByteBuf 内部维护了一个组件列表（Component数组），保存了对原始ByteBuf的引用以及在缓冲区中的起始偏移量和结束偏移量。当进行读写时，Netty会根据偏移量直接操作对应的原始ByteBuf，而无需将数据复制到新的连续内存区域。  
 - ByteBuf：ByteBuf提供了直接缓冲区（Direct Buffer）和堆缓冲区（Heap Buffer），而直接缓冲区就是堆外内存，使用直接缓冲区可以减少堆内外之间数据的拷贝
 - 内存映射文件：通过 MappedByteBuffer 将文件映射到内存中，使得文件数据可以直接读写，无需额外的数据复制，进而封装成Netty的ByteBuf用于高效传输   
+
+
+### Netty 性能为什么这么高？  
+
+- 非阻塞I/O模型：Netty 底层使用 NIO 非阻塞模型，并且利用 I/O 多路复用，通过 Selector 监听多个 Channel 的 IO 时间，使得系统资源得到了充分利用，减少线程开销
+- 高效的内存操作与内存池设计：ByteBuf 提供了丰富的功能，如动态扩展、符合缓冲区等，能有效地进行内存操作，并使用内存池技术来优化ByteBuf的分配和回收，减少频繁的内存分配和释放操作，提高性能
+- 优秀的线程模型：Netty 底层有很多哦优秀的线程模型，如 Reactor 模型、主从 Reactor 模型、多线程模型等，可以高效地发挥系统资源的优势，减少锁冲突，实现无串行，针对不同业务场景的诉求，可以自定灵活控制线程，提高系统的并发处理能力
+- 零拷贝
+
+
+### 说一下 TCP 半包和粘包问题？  
+
+因为 TCP 协议是面向字节流的，数据在传输过程中没有明确的边界，所以会发生粘包和半包问题  
+- 粘包：指的是多个应用层的数据包在传输过程中被合并成一个 TCP 数据包，导致接收方无法区分各个独立的数据包
+- 半包：指的是一个应用层的数据包在传输过程中被拆分成多个 TCP 数据包，接收方需要多次读取才能获取完整的数据
+
+常见解决粘包与半包问题有三个方案：  
+- 固定长度：约定每个数据包的长度固定，接收方每次读取固定长度的数据即可
+- 分隔符：在每个数据包的末尾添加特定的分隔符（如换行符\n），接收方以此为标志分割数据包
+- 固定长度字段+内容：在每个数据包的头部添加一个固定长度的字段，表示数据包的总长度，接收方根据该字段读取完整的数据包  
+
+
+### Netty 是如何解决粘包和拆包问题的？  
+
+Netty 提供了丰富的自带解码器为我们解决粘包和拆包问题，也可以让我们自定义序列化解码器  
+
+Netty 自带的解码器：  
+- DelimiterBasedFrameDecoder：分隔符解码器，使用特定分隔符来分割消息
+- FixedLengthFrameDecoder：固定长度的解码器
+- LengthFieldBasedFrameDecoder：可以根据接收到的消息的长度实现消息的动态切分解码，也就是数据包头部有一个固定长度字段
+- LineBasedFrameDecoder：特殊的分隔符解码器，采用换行符作为分隔符
+
+自定义解码器：继承 ByteToMessageDecoder
+
+
+### Netty 采用了哪些设计模式？  
+
+1. 策略模式：Netty 提供了多种 EventLoopGroup 实现（如 NioEventLoopGroup、EpollEventLoopGroup），可以根据不同的操作系统和需求来选择不同的实现
+2. 单例模式：池化设计经常需要用到单例模式，Netty 的 PooledByteBufAllocator.DEFAULT 就是一个单例实例，用于全局共享的内存池分配器
+3. 工厂模式：Bootstrap 和 ServerBootstrap 在创建 Channel 的时候，可以根据传入的 Class 参数来构建对应的 Channel，这个就是工厂模式的一个实现
+4. 责任链模式：Netty 中的 ChannelPipeLine 和 ChannelHandler 就是责任链模式的典型应用
+5. 建造者模式：Netty 的 Bootstrap 和 ServerBootstrap 类采用了建造者模式，用于配置和创建客户端和服务器实例。通过链式调用的方式，用户可以很方便地配置各种参数，并最终调用 bind 或 connect 方法来启动服务
+6. 装饰者模式：ByteBuf 实现了装饰者模式。不同的 ByteBuf 实现类可以相互包装，以添加新的功能
+
+
+### Netty 如何解决 JDK NIO 中的空轮询 Bug？
+
+JDK NIO 中空轮询 Bug 的原因：  
+当连接的 Socket 被突然中断（如对端异常关闭）时，epoll 会将该 Socket 的事件标记为 EPOLLHUP 或 EPOLLERR，导致 Selector 被唤醒。然而，SelectionKey 并未定义处理这些异常事件的类型，导致 Selector 被唤醒后，无法处理这些异常事件，从而进入空轮询状态，导致 CPU 占用率过高。  
+
+Netty 实际上并没有解决 JDK 原生 NIO 中空轮询 bug，而是通过其他途径绕开了这个错误。    
+具体操作如下：  
+1. 统计空轮询次数：Netty 通过 selectCnt 计数器来统计连续空轮询的次数。每次执行 Selector.select() 方法后，如果没有 I/O 事件，selectCnt 就会递增
+2. 设置阈值：Netty 定义了一个阈值 SELECTOR_AUTO_REBUILD_THRESHOLD，默认值为 512。当空轮询次数打到这个阈值时，Netty 会触发重建 Selector 的操作
+3. 重建 Selector：当打到空轮询的阈值时，Netty 会创建一个新的 Selector，并将所有注册的 Channel 从旧的 Selector 转移到新的 Selector。这一过程涉及到取消旧 Selector 的注册，以及在新的 Selector 上重新注册 Channel
+4. 关闭旧的 Selector：在成功重建 Selector 并将 Channel 重新注册后，Netty 会关闭旧的 Selector，从而避免在旧 Selector 上发生空轮询。  
+
+总的来看，就是通过 selectCnt 来统计没有 I/O 事件的次数来判断当前是否发生了空轮询，如果发生了就重建一个 Selector 替换之前出问题的 Selector，所以说 Netty 并没有实际解决空轮询的 Bug，只是绕开了这个问题。  
+
+
+### 在 Netty 中，什么是 Channel？什么是是 ChannelHandlerContext？  
+
+在 Netty 中，Channel 表示一个网络连接，抽象了底层的网络操作，提供了绑定、连接、读写和关闭等操作，是网络 IO 操作的核心抽象。   
+
+ChannelHandlerContext 是 Netty 中用来在 ChannelPipeline 中传递数据和处理上下文的对象，它连接 ChannelHandler 和 ChannelPipeline，用于在 ChannelPipeline 中传递事件和操作。   
+ChannelHandlerContext 可以通过 fireChannelRead() 方法来将数据和消息传递给 ChannelPipeline 中的下一个 ChannelHandler。   
+
+Channel 有多种类型：  
+- SocketChannel：可以直接将它当作所建立的连接，利用 TCP 协议进行读写网络数据
+- ServerSocketChannel：服务端创建的 Socket，用于监听新建连的 TCP 连接，并为该连接创建对应的 SocketChannel
+- DatagramChannel：采用 UDP 协议，直接通过 UDP 进行网络数据读写
+- FileChannel：用于文件的数据读写  
