@@ -117,7 +117,9 @@ module.exports = {
               './Java/知识点自测速记/知识点自测速记之MySQL.md',
               './Java/知识点自测速记/知识点自测速记之Redis.md',
               './Java/知识点自测速记/知识点自测速记之Spring.md',
-              './Java/知识点自测速记/知识点自测速记之Mybatis.md'
+              './Java/知识点自测速记/知识点自测速记之Mybatis.md',
+              './Java/知识点自测速记/知识点自测速记之Netty.md',
+              './Java/知识点自测速记/知识点自测速记之系统设计.md'
             ]
           }
         ]
