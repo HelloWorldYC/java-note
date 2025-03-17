@@ -262,3 +262,10 @@ RocketMQ 通常使用 Zookeeper 来管理主从节点的元数据，包括节点
 
 RocketMQ 的消费负载均衡主要是通过消费者组、消费者实例与消息队列来实现的。具体来说，每个消费者组由多个消费者实例组成，每个消费者实例会消费一部分消息队列中的消息。为了实现负载均衡，RocketMQ 会自动将消息队列分配给消费者组中的各个消费者实例，当消费者实例增加或减少时，系统会动态地进行重新分配，确保消息队列的负载均衡。   
 
+
+### 在 RocketMQ 中，如何配置并发消费和顺序消费？   
+
+可以通过不同的消息监听器：   
+- 并发消费是默认模式，直接使用默认的 `MessageListenerConcurrently` 消息监听器实现即可，并且，可以通过 `setConsumeThreadMin` 和 `setConsumeThreadMax` 方法来控制消费线程的数量
+- 顺序消费需要使用 `MessageListenerOrderly`  
+
