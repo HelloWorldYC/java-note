@@ -41,7 +41,7 @@ Seata 中有三大模块，分别是 TM、RM、TC。其中，TM 和 RM 是作为
 - TM：Transaction Manager，事务管理器，定义全局事务的范围（开始全局事务、提交或回滚全局事务）
 - RM：Resource Manager，资源管理器，管理分支事务处理的资源，与 TC 交谈以注册分支事务和报告分支事务的状态，并驱动分支事务提交或回滚
 
-![seata执行流程](./asserts/分布式事务seata/seata执行流程.png)  
+<div align="center"><img src="./asserts/分布式事务seata/seata执行流程.png" width="80%"/></div> 
 
 seata 分布式事务的执行流程如下：（有待完善）  
 1. TM 开启分布式事务，向 TC 注册全局事务记录；
@@ -161,7 +161,7 @@ Saga 在 Seata 中是基于状态机引擎实现的，机制如下：
     > 注意：异常发生时是否进行补偿也可由用户自定义决定   
 4. 可以实现服务编排需求，支持单项选择、并发、子流程、参数转换、参数映射、服务执行状态判断、异常捕获等功能
 
-![Saga基于状态机引擎的实现](./asserts/分布式事务seata/Saga基于状态机引擎的实现.png)  
+<div align="center"><img src="./asserts/分布式事务seata/Saga基于状态机引擎的实现.png" width="60%"/></div> 
 
 
 
